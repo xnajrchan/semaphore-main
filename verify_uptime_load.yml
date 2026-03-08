@@ -1,0 +1,14 @@
+---
+- name: Verificar uptime y carga de CPU
+  hosts: ssh_servers
+  gather_facts: false
+
+  tasks:
+    - name: Obtener uptime del sistema
+      ansible.builtin.command: uptime
+      register: uptime_output
+      changed_when: false
+
+    - name: Mostrar uptime y carga
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} -> {{ uptime_output.stdout }}"
