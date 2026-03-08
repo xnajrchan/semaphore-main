@@ -1,13 +1,8 @@
-- name: Ping site
-  shell: |
-    if [[ "$(uname)" == "Darwin" ]]; then
-      ping -c 1 -t 2 semaphoreui.com
-    else
-      ping -c 1 -w 2 semaphoreui.com
-    fi
-  register: ping_result
+---
+- name: Verificar conectividad con servidores SSH
+  hosts: ssh_servers
+  gather_facts: false
 
-
-- name: Ping result
-  debug:
-    msg: "{{ ping_result.stdout_lines }}"
+  tasks:
+    - name: Test de conectividad usando Ansible ping
+      ansible.builtin.ping:
