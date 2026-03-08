@@ -1,0 +1,18 @@
+---
+- name: Ping ICMP desde el controlador Ansible
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    target_hosts: "{{ groups['ssh_servers'] }}"
+
+  tasks:
+    - name: Ejecutar ping ICMP
+      ansible.builtin.shell: "ping -c 3 {{ item }}"
+      loop: "{{ target_hosts }}"
+      register: ping_results
+      ignore_errors: true
+
+    - name: Mostrar resultados
+      ansible.builtin.debug:
+        var: ping_results.results
