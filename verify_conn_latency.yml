@@ -1,0 +1,40 @@
+---
+- name: Verificar conectividad ICMP y latencia
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    target_hosts: "{{ groups['ssh_servers'] | default([]) }}"
+
+  tasks:
+    - name: Validar que exista el grupo ssh_servers
+      ansible.builtin.assert:
+        that:
+          - target_hosts | length > 0
+        fail_msg: "No se encontraron hosts en el grupo ssh_servers"
+
+    - name: Ejecutar ping ICMP a cada servidor
+      ansible.builtin.command:
+        argv:
+          - ping
+          - -c
+          - "3"
+          - -W
+          - "2"
+          - "{{ item }}"
+      loop: "{{ target_hosts }}"
+      register: ping_results
+      ignore_errors: true
+      changed_when: false
+
+    - name: Mostrar resumen de resultados ICMP
+      ansible.builtin.debug:
+        msg: |
+          Host: {{ item.item }}
+          RC: {{ item.rc }}
+          STDOUT:
+          {{ item.stdout | default('') }}
+
+          STDERR:
+          {{ item.stderr | default('') }}
+      loop: "{{ ping_results.results }}"
