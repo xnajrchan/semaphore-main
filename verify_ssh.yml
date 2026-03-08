@@ -1,0 +1,9 @@
+---
+- name: Verificacion conectividad
+  hosts: ssh_servers
+  gather_facts: false
+  strategy: free
+
+  tasks:
+    - name: Verificando conectividad SSH
+      ansible.builtin.ping:
