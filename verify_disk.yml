@@ -1,0 +1,16 @@
+---
+- name: Verificar uso de disco
+  hosts: ssh_servers
+  gather_facts: false
+
+  tasks:
+    - name: Obtener uso de disco
+      ansible.builtin.command: df -h
+      register: disk_output
+      changed_when: false
+
+    - name: Mostrar uso de disco
+      ansible.builtin.debug:
+        msg: |
+          Host: {{ inventory_hostname }}
+          {{ disk_output.stdout }}
