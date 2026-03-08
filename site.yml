@@ -1,5 +1,5 @@
 ---
-- hosts: SSH Servers
+- hosts: ssh_servers
   become: true
   tasks:
     - name: Print PS info
