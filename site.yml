@@ -1,7 +1,9 @@
 ---
 - hosts: ssh_servers
   become: true
+
   tasks:
-    - name: Print PS info
-    ansible.builtin.package:
-      name: apache2
+    - name: Install Apache Package
+      ansible.builtin.package:
+        name: apache2
+        state: present
